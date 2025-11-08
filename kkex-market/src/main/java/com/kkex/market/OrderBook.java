@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
+import lombok.Getter;
 
 /**
  * 订单簿 - 维护市场上的买单和卖单，提供当前市场深度信息
@@ -140,6 +141,7 @@ public class OrderBook {
     /**
      * 价格层级 - 表示某个价格的订单总量
      */
+    @Getter
     public static class PriceLevel {
         private final BigDecimal price;
         private final BigDecimal quantity;
@@ -147,14 +149,6 @@ public class OrderBook {
         public PriceLevel(BigDecimal price, BigDecimal quantity) {
             this.price = price;
             this.quantity = quantity;
-        }
-
-        public BigDecimal getPrice() {
-            return price;
-        }
-
-        public BigDecimal getQuantity() {
-            return quantity;
         }
 
         @Override

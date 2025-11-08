@@ -1,12 +1,14 @@
 package com.kkex.engine.matching;
 
-import com.kkex.common.model.Trade;
+import com.kkex.common.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 订单匹配引擎 - 负责订单的匹配和交易生成
@@ -28,8 +30,8 @@ public class OrderMatchingEngine {
      * @param order 待处理的订单
      * @return 生成的交易列表
      */
-    public List<Trade> processOrder(Order order) {
-        List<Trade> trades = new ArrayList<>();
+    public List<Order> processOrder(Order order) {
+        List<Order> trades = new ArrayList<>();
         String symbol = order.getSymbol();
 
         // 初始化买卖单队列（如果不存在）
@@ -47,7 +49,7 @@ public class OrderMatchingEngine {
         return trades;
     }
 
-    private void matchBuyOrder(Order buyOrder, List<Trade> trades) {
+    private void matchBuyOrder(Order buyOrder, List<Order> trades) {
         String symbol = buyOrder.getSymbol();
         PriorityQueue<Order> sellQueue = sellOrders.get(symbol);
 
@@ -60,8 +62,7 @@ public class OrderMatchingEngine {
                 BigDecimal tradePrice = sellOrder.getPrice();
 
                 // 创建交易记录
-                Trade trade = new Trade(
-                        generateTradeId(),
+                Order trade = new Order(
                         buyOrder.getOrderId(),
                         symbol,
                         "BUY",
@@ -90,7 +91,7 @@ public class OrderMatchingEngine {
         }
     }
 
-    private void matchSellOrder(Order sellOrder, List<Trade> trades) {
+    private void matchSellOrder(Order sellOrder, List<Order> trades) {
         String symbol = sellOrder.getSymbol();
         PriorityQueue<Order> buyQueue = buyOrders.get(symbol);
 
@@ -103,8 +104,7 @@ public class OrderMatchingEngine {
                 BigDecimal tradePrice = buyOrder.getPrice();
 
                 // 创建交易记录
-                Trade trade = new Trade(
-                        generateTradeId(),
+                Order trade = new Order(
                         sellOrder.getOrderId(),
                         symbol,
                         "SELL",
@@ -140,6 +140,8 @@ public class OrderMatchingEngine {
     /**
      * 订单类 - 定义订单的基本属性
      */
+    @Getter
+    @Setter
     public static class Order {
         private String orderId;
         private String symbol;
@@ -152,47 +154,6 @@ public class OrderMatchingEngine {
             this.symbol = symbol;
             this.side = side;
             this.price = price;
-            this.quantity = quantity;
-        }
-
-        // Getters and Setters
-        public String getOrderId() {
-            return orderId;
-        }
-
-        public void setOrderId(String orderId) {
-            this.orderId = orderId;
-        }
-
-        public String getSymbol() {
-            return symbol;
-        }
-
-        public void setSymbol(String symbol) {
-            this.symbol = symbol;
-        }
-
-        public String getSide() {
-            return side;
-        }
-
-        public void setSide(String side) {
-            this.side = side;
-        }
-
-        public BigDecimal getPrice() {
-            return price;
-        }
-
-        public void setPrice(BigDecimal price) {
-            this.price = price;
-        }
-
-        public BigDecimal getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(BigDecimal quantity) {
             this.quantity = quantity;
         }
 

@@ -1,11 +1,10 @@
 package com.kkex.clearing;
 
-import com.kkex.common.model.Trade;
+import com.kkex.common.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,9 +17,9 @@ public class ClearingService {
     // 账户余额映射
     private final Map<String, Map<String, BigDecimal>> accountBalances = new ConcurrentHashMap<>();
     // 待清算的交易
-    private final Queue<Trade> pendingTrades = new LinkedList<>();
+    private final Queue<Order> pendingOrders = new LinkedList<>();
     // 已清算的交易
-    private final Set<String> clearedTrades = ConcurrentHashMap.newKeySet();
+    private final Set<String> clearedOrders = ConcurrentHashMap.newKeySet();
 
     public ClearingService() {
         logger.info("Clearing Service started");
@@ -30,19 +29,19 @@ public class ClearingService {
      * 提交交易进行清算
      * @param trade 待清算的交易
      */
-    public synchronized void submitTradeForClearing(Trade trade) {
+    public synchronized void submitOrderForClearing(Order trade) {
         if (trade == null) {
             logger.error("Cannot submit null trade for clearing");
             return;
         }
         
-        if (clearedTrades.contains(trade.getTradeId())) {
-            logger.warn("Trade already cleared: {}", trade.getTradeId());
+        if (clearedOrders.contains(trade.getOrderId())) {
+            logger.warn("Trade already cleared: {}", trade.getOrderId());
             return;
         }
         
-        pendingTrades.offer(trade);
-        logger.debug("Trade submitted for clearing: {}", trade.getTradeId());
+        clearedOrders.add(trade.getOrderId());
+        logger.debug("Trade submitted for clearing: {}", trade.getOrderId());
     }
 
     /**
@@ -51,16 +50,16 @@ public class ClearingService {
      */
     public synchronized int processPendingTrades() {
         int processedCount = 0;
-        Trade trade;
+        Order trade;
         
-        while ((trade = pendingTrades.poll()) != null) {
-            boolean cleared = clearTrade(trade);
+        while ((trade = pendingOrders.poll()) != null) {
+            boolean cleared = clearOrder(trade);
             if (cleared) {
                 processedCount++;
-                clearedTrades.add(trade.getTradeId());
-                logger.info("Trade cleared successfully: {}", trade.getTradeId());
+                clearedOrders.add(trade.getOrderId());
+                logger.info("Trade cleared successfully: {}", trade.getOrderId());
             } else {
-                logger.error("Failed to clear trade: {}", trade.getTradeId());
+                logger.error("Failed to clear trade: {}", trade.getOrderId());
                 // 可以选择将失败的交易重新放入队列或进行其他处理
             }
         }
@@ -73,7 +72,7 @@ public class ClearingService {
      * @param trade 待清算的交易
      * @return 清算是否成功
      */
-    private boolean clearTrade(Trade trade) {
+    private boolean clearOrder(Order trade) {
         try {
             String symbol = trade.getSymbol();
             BigDecimal price = trade.getPrice();
@@ -104,7 +103,7 @@ public class ClearingService {
             
             return true;
         } catch (Exception e) {
-            logger.error("Error clearing trade {}: {}", trade.getTradeId(), e.getMessage(), e);
+            logger.error("Error clearing trade {}: {}", trade.getOrderId(), e.getMessage(), e);
             return false;
         }
     }
@@ -170,9 +169,9 @@ public class ClearingService {
      * 创建清算记录
      * @param trade 交易信息
      */
-    private void createClearingRecord(Trade trade) {
+    private void createClearingRecord(Order trade) {
         // 在实际系统中，这里会将清算记录持久化到数据库
-        logger.debug("Clearing record created for trade: {}", trade.getTradeId());
+        logger.debug("Clearing record created for trade: {}", trade.getOrderId());
     }
 
     /**
@@ -215,75 +214,6 @@ public class ClearingService {
         Map<String, BigDecimal> balances = getOrCreateAccountBalances(accountId);
         deductFunds(balances, amount);
         logger.info("Withdrew {} from account {}", amount, accountId);
-    }
-
-    /**
-     * 清算记录类 - 记录清算的详细信息
-     */
-    public static class ClearingRecord {
-        private String clearingId;
-        private String tradeId;
-        private String orderId;
-        private LocalDateTime clearingTime;
-        private String status;
-        private String notes;
-
-        public ClearingRecord(String tradeId, String orderId) {
-            this.clearingId = "CLR" + System.currentTimeMillis() + UUID.randomUUID().toString().substring(0, 8);
-            this.tradeId = tradeId;
-            this.orderId = orderId;
-            this.clearingTime = LocalDateTime.now();
-            this.status = "PENDING";
-        }
-
-        // Getters and Setters
-        public String getClearingId() {
-            return clearingId;
-        }
-
-        public String getTradeId() {
-            return tradeId;
-        }
-
-        public String getOrderId() {
-            return orderId;
-        }
-
-        public LocalDateTime getClearingTime() {
-            return clearingTime;
-        }
-
-        public void setClearingTime(LocalDateTime clearingTime) {
-            this.clearingTime = clearingTime;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public String getNotes() {
-            return notes;
-        }
-
-        public void setNotes(String notes) {
-            this.notes = notes;
-        }
-
-        @Override
-        public String toString() {
-            return "ClearingRecord{" +
-                    "clearingId='" + clearingId + '\'' +
-                    ", tradeId='" + tradeId + '\'' +
-                    ", orderId='" + orderId + '\'' +
-                    ", clearingTime=" + clearingTime +
-                    ", status='" + status + '\'' +
-                    ", notes='" + notes + '\'' +
-                    '}';
-        }
     }
 
     /**
