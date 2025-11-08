@@ -1,37 +1,79 @@
-# kkex
+# KKEX - Trading Exchange System
 
-#### 介绍
-kkex is an exchange.
+KKEX是一个基于Java开发的交易系统，包含四个核心模块，用于实现交易平台的基本功能。
 
-#### 软件架构
-软件架构说明
+## 项目结构
 
+```
+kkex/
+├── kkex-common/       # 公共模块，包含共享的模型和工具类
+├── kkex-engine/       # 交易引擎模块，负责订单匹配和处理
+├── kkex-market/       # 市场数据模块，负责订单簿维护和市场数据管理
+├── kkex-clearing/     # 清算模块，负责交易的清算和结算
+├── pom.xml            # 根项目Maven配置文件
+└── README.md          # 项目说明文档
+```
 
-#### 安装教程
+## 模块说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+### kkex-common
+公共模块，提供所有其他模块共享的基础组件：
+- 核心数据模型（如Trade类）
+- 通用工具类
+- 常量定义
+- 异常处理类
 
-#### 使用说明
+### kkex-engine
+交易引擎模块，系统的核心组件：
+- 订单匹配引擎
+- 订单处理逻辑
+- 交易生成
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+### kkex-market
+市场数据模块，负责市场数据的管理：
+- 订单簿维护
+- 市场深度信息
+- 交易历史记录
+- 市场数据发布
 
-#### 参与贡献
+### kkex-clearing
+清算模块，处理交易的清算和结算：
+- 交易清算逻辑
+- 资金和资产的划转
+- 清算记录管理
+- 账户余额维护
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+## 技术栈
 
+- Java 8
+- Maven
+- SLF4J (日志框架)
+- Guava (工具库)
 
-#### 特技
+## 如何构建项目
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+确保已安装JDK 8和Maven，然后在项目根目录执行以下命令：
+
+```bash
+mvn clean install
+```
+
+## 开发说明
+
+1. 克隆项目代码
+2. 使用IDE（如IntelliJ IDEA、Eclipse等）导入Maven项目
+3. 根据需要修改或扩展各个模块的功能
+
+## 扩展建议
+
+- 添加持久层，使用数据库存储交易记录、订单信息等
+- 实现REST API接口，提供前端访问功能
+- 增加安全认证和授权机制
+- 添加监控和告警功能
+- 实现分布式部署支持
+
+## 注意事项
+
+- 本项目是一个基础框架，实际生产环境中需要根据具体需求进行扩展和优化
+- 涉及资金和交易的系统需要特别注意安全性和数据一致性
+- 建议在实际部署前进行充分的测试和性能优化
