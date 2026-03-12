@@ -2,6 +2,9 @@
 
 MAEX是一个基于Java开发的交易系统，包含四个核心模块，用于实现交易平台的基本功能。
 
+# 参考
+https://gitee.com/kimmking/kkex
+
 ## 项目结构
 
 ```
