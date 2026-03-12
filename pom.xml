@@ -4,18 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kkex</groupId>
-    <artifactId>kkex</artifactId>
+    <groupId>com.maex</groupId>
+    <artifactId>maex</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>KKEX - Trading Exchange System</name>
-    <description>KKEX Trading Exchange System with multiple modules</description>
+    <name>MAEX - Trading Exchange System</name>
+    <description>MAEX Trading Exchange System with multiple modules</description>
 
     <modules>
-        <module>kkex-common</module>
-        <module>kkex-engine</module>
-        <module>kkex-market</module>
-        <module>kkex-clearing</module>
+        <module>maex-common</module>
+        <module>maex-engine</module>
+        <module>maex-market</module>
+        <module>maex-clearing</module>
     </modules>
 
     <properties>

@@ -1,42 +1,42 @@
-# KKEX - Trading Exchange System
+# MAEX - Trading Exchange System
 
-KKEX是一个基于Java开发的交易系统，包含四个核心模块，用于实现交易平台的基本功能。
+MAEX是一个基于Java开发的交易系统，包含四个核心模块，用于实现交易平台的基本功能。
 
 ## 项目结构
 
 ```
-kkex/
-├── kkex-common/       # 公共模块，包含共享的模型和工具类
-├── kkex-engine/       # 交易引擎模块，负责订单匹配和处理
-├── kkex-market/       # 市场数据模块，负责订单簿维护和市场数据管理
-├── kkex-clearing/     # 清算模块，负责交易的清算和结算
+maex/
+├── maex-common/       # 公共模块，包含共享的模型和工具类
+├── maex-engine/       # 交易引擎模块，负责订单匹配和处理
+├── maex-market/       # 市场数据模块，负责订单簿维护和市场数据管理
+├── maex-clearing/     # 清算模块，负责交易的清算和结算
 ├── pom.xml            # 根项目Maven配置文件
 └── README.md          # 项目说明文档
 ```
 
 ## 模块说明
 
-### kkex-common
+### maex-common
 公共模块，提供所有其他模块共享的基础组件：
 - 核心数据模型（如Trade类）
 - 通用工具类
 - 常量定义
 - 异常处理类
 
-### kkex-engine
+### maex-engine
 交易引擎模块，系统的核心组件：
 - 订单匹配引擎
 - 订单处理逻辑
 - 交易生成
 
-### kkex-market
+### maex-market
 市场数据模块，负责市场数据的管理：
 - 订单簿维护
 - 市场深度信息
 - 交易历史记录
 - 市场数据发布
 
-### kkex-clearing
+### maex-clearing
 清算模块，处理交易的清算和结算：
 - 交易清算逻辑
 - 资金和资产的划转

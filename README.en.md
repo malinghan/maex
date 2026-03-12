@@ -1,7 +1,7 @@
-# kkex
+# maex
 
 #### Description
-kkex is an exchange.
+maex is an exchange.
 
 #### Software Architecture
 Software architecture description
