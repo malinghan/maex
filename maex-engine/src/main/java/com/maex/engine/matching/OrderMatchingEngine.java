@@ -7,15 +7,13 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 订单匹配引擎 - 负责订单的匹配和交易生成
  */
 public class OrderMatchingEngine {
     private static final Logger logger = LoggerFactory.getLogger(OrderMatchingEngine.class);
-    
+
     // 按交易对存储买单和卖单
     private final Map<String, PriorityQueue<Order>> buyOrders = new ConcurrentHashMap<>();
     private final Map<String, PriorityQueue<Order>> sellOrders = new ConcurrentHashMap<>();
@@ -135,37 +133,5 @@ public class OrderMatchingEngine {
 
     private String generateTradeId() {
         return "TRD" + System.currentTimeMillis() + UUID.randomUUID().toString().substring(0, 8);
-    }
-
-    /**
-     * 订单类 - 定义订单的基本属性
-     */
-    @Getter
-    @Setter
-    public static class Order {
-        private String orderId;
-        private String symbol;
-        private String side; // BUY or SELL
-        private BigDecimal price;
-        private BigDecimal quantity;
-
-        public Order(String orderId, String symbol, String side, BigDecimal price, BigDecimal quantity) {
-            this.orderId = orderId;
-            this.symbol = symbol;
-            this.side = side;
-            this.price = price;
-            this.quantity = quantity;
-        }
-
-        @Override
-        public String toString() {
-            return "Order{" +
-                    "orderId='" + orderId + '\'' +
-                    ", symbol='" + symbol + '\'' +
-                    ", side='" + side + '\'' +
-                    ", price=" + price +
-                    ", quantity=" + quantity +
-                    '}';
-        }
     }
 }

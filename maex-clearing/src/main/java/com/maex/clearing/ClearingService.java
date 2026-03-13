@@ -193,7 +193,7 @@ public class ClearingService {
      * @param accountId 账户ID
      * @param amount 金额
      */
-    public void deposit(String accountId, BigDecimal amount) {
+    public synchronized void deposit(String accountId, BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Deposit amount must be positive");
         }
@@ -207,7 +207,7 @@ public class ClearingService {
      * @param accountId 账户ID
      * @param amount 金额
      */
-    public void withdraw(String accountId, BigDecimal amount) {
+    public synchronized void withdraw(String accountId, BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Withdrawal amount must be positive");
         }
